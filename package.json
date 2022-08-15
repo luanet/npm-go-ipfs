@@ -54,6 +54,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "electron-log": "4.4.8",
     "cachedir": "^2.3.0",
     "got": "^11.7.0",
     "gunzip-maybe": "^1.4.2",
