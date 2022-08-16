@@ -12,11 +12,9 @@ module.exports.path = function () {
     path.resolve(path.join(__dirname, '..', 'go-ipfs', 'ipfs.exe'))
   ]
 
-  log.info(paths)
   for (const bin of paths) {
-    const path = bin.replace('app.asar', 'app.asar.unpacked')
-    if (fs.existsSync(path)) {
-      return path
+    if (fs.existsSync(bin)) {
+      return bin
     }
   }
 
