@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const log = require('electron-log')
+const download = require('./download')
 
 module.exports.path = function () {
   const paths = [
@@ -20,3 +21,5 @@ module.exports.path = function () {
 
   throw new Error('go-ipfs binary not found, it may not be installed or an error may have occurred during installation')
 }
+
+module.exports.download = download
