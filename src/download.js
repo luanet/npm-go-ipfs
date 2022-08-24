@@ -189,33 +189,12 @@ async function download ({ version, platform, arch, installPath, distUrl }) {
  * @param {string} options.version
  */
 async function link ({ depBin, version }) {
-  let localBin = path.resolve(path.join(__dirname, '..', 'bin', 'ipfs'))
-
-  if (isWin) {
-    localBin += '.exe'
-  }
-
   if (!fs.existsSync(depBin)) {
     throw new Error('ipfs binary not found. maybe go-ipfs did not install correctly?')
   }
 
-  if (fs.existsSync(localBin)) {
-    fs.unlinkSync(localBin)
-  }
-
-  console.info('Linking', depBin, 'to', localBin)
-  fs.symlinkSync(depBin, localBin)
-
-  if (isWin) {
-    // On Windows, update the shortcut file to use the .exe
-    const cmdFile = path.join(__dirname, '..', '..', 'ipfs.cmd')
-
-    fs.writeFileSync(cmdFile, `@ECHO OFF
-  "%~dp0\\node_modules\\go-ipfs\\bin\\ipfs.exe" %*`)
-  }
-
   // test ipfs installed correctly.
-  var result = cproc.spawnSync(localBin, ['version'])
+  var result = cproc.spawnSync(depBin, ['version'])
   if (result.error) {
     throw new Error('ipfs binary failed: ' + result.error)
   }
@@ -233,7 +212,7 @@ async function link ({ depBin, version }) {
     throw new Error(`version mismatch: expected ${version} got ${actualVersion}`)
   }
 
-  return localBin
+  return depBin
 }
 
 /**
