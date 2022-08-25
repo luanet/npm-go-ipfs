@@ -193,25 +193,7 @@ async function link ({ depBin, version }) {
     throw new Error('ipfs binary not found. maybe go-ipfs did not install correctly?')
   }
 
-  // test ipfs installed correctly.
-  var result = cproc.spawnSync(depBin, ['version'])
-  if (result.error) {
-    throw new Error('ipfs binary failed: ' + result.error)
-  }
-
-  var outstr = result.stdout.toString()
-  var m = /ipfs version ([^\n]+)\n/.exec(outstr)
-
-  if (!m) {
-    throw new Error('Could not determine IPFS version')
-  }
-
-  var actualVersion = `v${m[1]}`
-
-  if (actualVersion !== version) {
-    throw new Error(`version mismatch: expected ${version} got ${actualVersion}`)
-  }
-
+  // no more link, no more run to check version because of invalid arch when build with electron builder
   return depBin
 }
 
