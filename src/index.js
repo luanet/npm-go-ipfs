@@ -6,18 +6,20 @@ const log = require('electron-log')
 const download = require('./download')
 
 module.exports.path = function () {
-  log.info(__dirname);
   const paths = [
     // packed
-    path.resolve(path.join(__dirname, '..', '..', 'bin', 'go-ipfs', 'go-ipfs', 'ipfs')),
-    path.resolve(path.join(__dirname, '..', '..', 'bin', 'go-ipfs', 'go-ipfs', 'ipfs.exe')),
+    path.resolve(path.join(__dirname, '..', '..', 'bin', 'go-ipfs', 'ipfs')),
+    path.resolve(path.join(__dirname, '..', '..', 'bin', 'go-ipfs', 'ipfs.exe')),
     // unpacked
     path.resolve(path.join(__dirname, '..', 'go-ipfs', 'go-ipfs', 'ipfs')),
     path.resolve(path.join(__dirname, '..', 'go-ipfs', 'go-ipfs', 'ipfs.exe')),
   ]
 
+  log.info(paths);
+
   for (const bin of paths) {
     if (fs.existsSync(bin)) {
+      log.info(`Found ipfs binary: ${bin}`)
       return bin
     }
   }
