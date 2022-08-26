@@ -189,51 +189,12 @@ async function download ({ version, platform, arch, installPath, distUrl }) {
  * @param {string} options.version
  */
 async function link ({ depBin, version }) {
-  let localBin = path.resolve(path.join(__dirname, '..', 'bin', 'ipfs'))
-
-  if (isWin) {
-    localBin += '.exe'
-  }
-
   if (!fs.existsSync(depBin)) {
     throw new Error('ipfs binary not found. maybe go-ipfs did not install correctly?')
   }
 
-  if (fs.existsSync(localBin)) {
-    fs.unlinkSync(localBin)
-  }
-
-  console.info('Linking', depBin, 'to', localBin)
-  fs.symlinkSync(depBin, localBin)
-
-  if (isWin) {
-    // On Windows, update the shortcut file to use the .exe
-    const cmdFile = path.join(__dirname, '..', '..', 'ipfs.cmd')
-
-    fs.writeFileSync(cmdFile, `@ECHO OFF
-  "%~dp0\\node_modules\\go-ipfs\\bin\\ipfs.exe" %*`)
-  }
-
-  // test ipfs installed correctly.
-  var result = cproc.spawnSync(localBin, ['version'])
-  if (result.error) {
-    throw new Error('ipfs binary failed: ' + result.error)
-  }
-
-  var outstr = result.stdout.toString()
-  var m = /ipfs version ([^\n]+)\n/.exec(outstr)
-
-  if (!m) {
-    throw new Error('Could not determine IPFS version')
-  }
-
-  var actualVersion = `v${m[1]}`
-
-  if (actualVersion !== version) {
-    throw new Error(`version mismatch: expected ${version} got ${actualVersion}`)
-  }
-
-  return localBin
+  // no more link, no more run to check version because of invalid arch when build with electron builder
+  return depBin
 }
 
 /**
